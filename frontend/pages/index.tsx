@@ -1,78 +1,138 @@
-import Image from "next/image";
-import { Geist, Geist_Mono } from "next/font/google";
+import {
+  Title,
+  Text,
+  Badge,
+  Card,
+  SimpleGrid,
+  Stack,
+  Group,
+  Button,
+} from '@mantine/core';
+import Link from 'next/link';
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const featureCards = [
+  {
+    title: 'Dashboard',
+    description:
+      'Get a full overview of your SSD inventory with real-time stats, health scores, and performance metrics at a glance.',
+    badge: 'Analytics',
+    href: '/',
+  },
+  {
+    title: 'View Records',
+    description:
+      'Browse, search, and filter all registered SSDs. Track serial numbers, capacity, status, and purchase history.',
+    badge: 'Records',
+    href: '/inventory',
+  },
+  {
+    title: 'Add SSD',
+    description:
+      'Quickly register a new SSD into the system. Enter device details, assign to a unit, and generate an entry ID instantly.',
+    badge: 'Register',
+    href: '/inventory/add',
+  },
+];
 
 export default function Home() {
   return (
-    <div
-      className={`${geistSans.className} ${geistMono.className} flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black`}
-    >
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the index.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <Stack gap="xl" maw={900} mx="auto">
+      {/* Hero Section */}
+      <Card
+        radius="xl"
+        p="xl"
+        style={{
+          background: '#121212',
+          color: 'white',
+        }}
+      >
+        <Group justify="space-between" align="flex-start">
+          <Stack gap="sm" style={{ maxWidth: 520 }}>
+            <Badge variant="white" color="dark" size="sm" w="fit-content">
+              Welcome Back
+            </Badge>
+            <Title order={1} style={{ color: 'white', lineHeight: 1.2 }}>
+              SSD Inventory
+              <br />
+              Management System
+            </Title>
+            <Text size="md" style={{ color: 'rgba(255,255,255,0.75)' }}>
+              Track, manage, and monitor all your Solid State Drives from a single, unified platform.
+            </Text>
+            <Group mt="sm">
+              <Button
+                component={Link}
+                href="/"
+                variant="white"
+                color="dark"
+                radius="xl"
+              >
+                Go to Dashboard
+              </Button>
+              <Button
+                component={Link}
+                href="/inventory/add"
+                variant="outline"
+                style={{ borderColor: 'rgba(255,255,255,0.5)', color: 'white' }}
+                radius="xl"
+              >
+                Add New SSD
+              </Button>
+            </Group>
+          </Stack>
+        </Group>
+      </Card>
+
+      {/* Feature Cards */}
+      <div>
+        <Title order={3} mb="md">
+          What would you like to do?
+        </Title>
+        <SimpleGrid cols={{ base: 1, sm: 3 }} spacing="md">
+          {featureCards.map((card) => (
+            <Card
+              key={card.title}
+              component={Link}
+              href={card.href}
+              shadow="sm"
+              radius="xl"
+              p="xl"
+              withBorder
+              style={{
+                cursor: 'pointer',
+                transition: 'transform 0.15s ease, box-shadow 0.15s ease',
+                textDecoration: 'none',
+                color: 'inherit',
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLElement).style.transform = 'translateY(-4px)';
+                (e.currentTarget as HTMLElement).style.boxShadow = '0 12px 32px rgba(0,0,0,0.08)';
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLElement).style.transform = 'translateY(0)';
+                (e.currentTarget as HTMLElement).style.boxShadow = '';
+              }}
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs/pages/getting-started?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+              <Stack gap="sm">
+                <Group justify="space-between">
+                  <Badge size="xs" color="dark" variant="light">
+                    {card.badge}
+                  </Badge>
+                </Group>
+                <Title order={4}>{card.title}</Title>
+                <Text size="sm" c="dimmed">
+                  {card.description}
+                </Text>
+                <Group gap={4} mt="xs" style={{ color: 'var(--mantine-color-dark-filled)' }}>
+                  <Text size="sm" fw={500}>
+                    Open
+                  </Text>
+                </Group>
+              </Stack>
+            </Card>
+          ))}
+        </SimpleGrid>
+      </div>
+    </Stack>
   );
 }
