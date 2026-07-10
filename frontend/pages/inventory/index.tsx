@@ -17,48 +17,54 @@ const dummyInventory = [
     model: 'Samsung 990 Pro',
     serial: 'S71DNU0W123456K',
     capacity: '2 TB',
-    health: 98,
-    status: 'Optimal',
+    interfaceType: 'NVMe PCIe 4.0',
+    status: 'Active',
+    location: 'Rack A, Bay 3',
   },
   {
     id: 'SSD-002',
     model: 'WD Black SN850X',
     serial: 'WDS200T2X0E-00B',
     capacity: '2 TB',
-    health: 100,
-    status: 'Optimal',
+    interfaceType: 'NVMe PCIe 4.0',
+    status: 'Available',
+    location: 'Stockroom Shelf 2',
   },
   {
     id: 'SSD-003',
-    model: 'Crucial T700',
-    serial: 'CT1000T700SSD8',
+    model: 'Crucial MX500',
+    serial: 'CT1000MX500SSD1',
     capacity: '1 TB',
-    health: 92,
-    status: 'Warning',
+    interfaceType: 'SATA III',
+    status: 'Failed',
+    location: 'Rack B, Bay 1',
   },
   {
     id: 'SSD-004',
     model: 'Kingston KC3000',
     serial: 'SKC3000D/2048G',
     capacity: '2 TB',
-    health: 85,
-    status: 'Optimal',
+    interfaceType: 'NVMe PCIe 4.0',
+    status: 'Active',
+    location: 'Rack A, Bay 4',
   },
   {
     id: 'SSD-005',
-    model: 'SanDisk Extreme Portable',
-    serial: 'SDSSDE61-1T00-G25',
-    capacity: '1 TB',
-    health: 45,
-    status: 'Critical',
+    model: 'Crucial T700',
+    serial: 'CT2000T700SSD5',
+    capacity: '2 TB',
+    interfaceType: 'NVMe PCIe 5.0',
+    status: 'Available',
+    location: 'Stockroom Shelf 2',
   },
 ];
 
 export default function Inventory() {
   const rows = dummyInventory.map((item) => {
     let statusColor = 'dark';
-    if (item.status === 'Warning') statusColor = 'gray';
-    if (item.status === 'Critical') statusColor = 'red'; // Keep red for critical errors, or we can use dark variants
+    if (item.status === 'Active') statusColor = 'dark';
+    if (item.status === 'Available') statusColor = 'gray';
+    if (item.status === 'Failed') statusColor = 'red';
 
     return (
       <Table.Tr key={item.id}>
@@ -66,14 +72,11 @@ export default function Inventory() {
         <Table.Td>{item.model}</Table.Td>
         <Table.Td style={{ fontFamily: 'monospace' }}>{item.serial}</Table.Td>
         <Table.Td>{item.capacity}</Table.Td>
-        <Table.Td>
-          <Group gap="xs">
-            <Text size="sm">{item.health}%</Text>
-          </Group>
-        </Table.Td>
+        <Table.Td>{item.interfaceType}</Table.Td>
+        <Table.Td>{item.location}</Table.Td>
         <Table.Td>
           <Badge
-            variant={item.status === 'Optimal' ? 'light' : 'filled'}
+            variant={item.status === 'Active' ? 'filled' : item.status === 'Available' ? 'light' : 'outline'}
             color={statusColor}
             size="sm"
           >
@@ -85,7 +88,7 @@ export default function Inventory() {
   });
 
   return (
-    <Stack gap="lg" maw={1000} mx="auto">
+    <Stack gap="lg" maw={1100} mx="auto">
       <Group justify="space-between" align="flex-end">
         <div>
           <Title order={2} style={{ letterSpacing: '-0.5px' }}>
@@ -103,21 +106,22 @@ export default function Inventory() {
       <Paper shadow="sm" radius="xl" p="xl" withBorder>
         <Group mb="md">
           <TextInput
-            placeholder="Search by serial number, model, or ID..."
+            placeholder="Search by serial number, model, location or ID..."
             style={{ flex: 1 }}
             radius="md"
           />
         </Group>
 
-        <Table.ScrollContainer minWidth={800}>
+        <Table.ScrollContainer minWidth={900}>
           <Table verticalSpacing="sm">
             <Table.Thead>
               <Table.Tr>
-                <Table.Th>ID</Table.Th>
-                <Table.Th>Model Name</Table.Th>
+                <Table.Th>Device ID</Table.Th>
+                <Table.Th>Model</Table.Th>
                 <Table.Th>Serial Number</Table.Th>
                 <Table.Th>Capacity</Table.Th>
-                <Table.Th>Health Status</Table.Th>
+                <Table.Th>Interface</Table.Th>
+                <Table.Th>Location</Table.Th>
                 <Table.Th>Status</Table.Th>
               </Table.Tr>
             </Table.Thead>

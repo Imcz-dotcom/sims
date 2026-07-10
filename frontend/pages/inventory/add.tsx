@@ -11,12 +11,11 @@ import {
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-export default function AddSSD() {
+export default function RegisterSSD() {
   const router = useRouter();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // In a real application, you would save the data to a database here
     alert('SSD successfully registered!');
     router.push('/inventory');
   };
@@ -28,18 +27,26 @@ export default function AddSSD() {
           Register New SSD
         </Title>
         <Text size="sm" c="dimmed">
-          Add a new solid-state drive to the system inventory.
+          Add a new solid-state drive to the system inventory database.
         </Text>
       </div>
 
       <Paper shadow="sm" radius="xl" p="xl" withBorder component="form" onSubmit={handleSubmit}>
         <Stack gap="md">
-          <TextInput
-            label="Model Name"
-            placeholder="e.g. Samsung 990 Pro"
-            required
-            radius="md"
-          />
+          <Group grow>
+            <TextInput
+              label="Device ID"
+              placeholder="e.g. SSD-006"
+              required
+              radius="md"
+            />
+            <TextInput
+              label="Model"
+              placeholder="e.g. Samsung 990 Pro"
+              required
+              radius="md"
+            />
+          </Group>
 
           <TextInput
             label="Serial Number"
@@ -57,11 +64,26 @@ export default function AddSSD() {
               required
               radius="md"
             />
+            <Select
+              label="Interface"
+              placeholder="Select interface"
+              data={['SATA III', 'NVMe PCIe 3.0', 'NVMe PCIe 4.0', 'NVMe PCIe 5.0']}
+              required
+              radius="md"
+            />
+          </Group>
 
+          <Group grow>
+            <Select
+              label="Status"
+              placeholder="Select status"
+              data={['Active', 'Available', 'Failed']}
+              required
+              radius="md"
+            />
             <TextInput
-              label="Health Status (%)"
-              placeholder="e.g. 100"
-              defaultValue="100"
+              label="Location"
+              placeholder="e.g. Rack A, Bay 5"
               required
               radius="md"
             />
