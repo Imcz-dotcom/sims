@@ -8,71 +8,67 @@ import {
   Button,
   TextInput,
   Stack,
+  Loader,
+  Center,
 } from '@mantine/core';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
-const dummyInventory = [
-  {
-    id: 'SSD-001',
-    model: 'Samsung 990 Pro',
-    serial: 'S71DNU0W123456K',
-    capacity: '2 TB',
-    interfaceType: 'NVMe PCIe 4.0',
-    status: 'Active',
-    location: 'Rack A, Bay 3',
-  },
-  {
-    id: 'SSD-002',
-    model: 'WD Black SN850X',
-    serial: 'WDS200T2X0E-00B',
-    capacity: '2 TB',
-    interfaceType: 'NVMe PCIe 4.0',
-    status: 'Available',
-    location: 'Stockroom Shelf 2',
-  },
-  {
-    id: 'SSD-003',
-    model: 'Crucial MX500',
-    serial: 'CT1000MX500SSD1',
-    capacity: '1 TB',
-    interfaceType: 'SATA III',
-    status: 'Failed',
-    location: 'Rack B, Bay 1',
-  },
-  {
-    id: 'SSD-004',
-    model: 'Kingston KC3000',
-    serial: 'SKC3000D/2048G',
-    capacity: '2 TB',
-    interfaceType: 'NVMe PCIe 4.0',
-    status: 'Active',
-    location: 'Rack A, Bay 4',
-  },
-  {
-    id: 'SSD-005',
-    model: 'Crucial T700',
-    serial: 'CT2000T700SSD5',
-    capacity: '2 TB',
-    interfaceType: 'NVMe PCIe 5.0',
-    status: 'Available',
-    location: 'Stockroom Shelf 2',
-  },
-];
+interface SSD {
+  _id: string;
+  deviceId: string;
+  model: string;
+  serialNumber: string;
+  capacity: string;
+  interface: string;
+  status: string;
+  location: string;
+}
 
 export default function Inventory() {
-  const rows = dummyInventory.map((item) => {
+  const [inventory, setInventory] = useState<SSD[]>([]);
+  const [search, setSearch] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    const fetchInventory = async () => {
+      try {
+        const res = await axios.get('http://localhost:5000/api/inventory');
+        setInventory(res.data);
+      } catch (err: any) {
+        setError(err.response?.data?.error || 'Failed to load inventory');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchInventory();
+  }, []);
+
+  const filtered = inventory.filter((item) => {
+    const q = search.toLowerCase();
+    return (
+      item.deviceId.toLowerCase().includes(q) ||
+      item.model.toLowerCase().includes(q) ||
+      item.serialNumber.toLowerCase().includes(q) ||
+      item.location.toLowerCase().includes(q)
+    );
+  });
+
+  const rows = filtered.map((item) => {
     let statusColor = 'dark';
     if (item.status === 'Active') statusColor = 'dark';
     if (item.status === 'Available') statusColor = 'gray';
     if (item.status === 'Failed') statusColor = 'red';
 
     return (
-      <Table.Tr key={item.id}>
-        <Table.Td style={{ fontWeight: 600 }}>{item.id}</Table.Td>
+      <Table.Tr key={item._id}>
+        <Table.Td style={{ fontWeight: 600 }}>{item.deviceId}</Table.Td>
         <Table.Td>{item.model}</Table.Td>
-        <Table.Td style={{ fontFamily: 'monospace' }}>{item.serial}</Table.Td>
+        <Table.Td style={{ fontFamily: 'monospace' }}>{item.serialNumber}</Table.Td>
         <Table.Td>{item.capacity}</Table.Td>
-        <Table.Td>{item.interfaceType}</Table.Td>
+        <Table.Td>{item.interface}</Table.Td>
         <Table.Td>{item.location}</Table.Td>
         <Table.Td>
           <Badge
@@ -109,25 +105,35 @@ export default function Inventory() {
             placeholder="Search by serial number, model, location or ID..."
             style={{ flex: 1 }}
             radius="md"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
           />
         </Group>
 
-        <Table.ScrollContainer minWidth={900}>
-          <Table verticalSpacing="sm">
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th>Device ID</Table.Th>
-                <Table.Th>Model</Table.Th>
-                <Table.Th>Serial Number</Table.Th>
-                <Table.Th>Capacity</Table.Th>
-                <Table.Th>Interface</Table.Th>
-                <Table.Th>Location</Table.Th>
-                <Table.Th>Status</Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>{rows}</Table.Tbody>
-          </Table>
-        </Table.ScrollContainer>
+        {loading ? (
+          <Center py="xl">
+            <Loader color="dark" />
+          </Center>
+        ) : error ? (
+          <Text c="red" size="sm">{error}</Text>
+        ) : (
+          <Table.ScrollContainer minWidth={900}>
+            <Table verticalSpacing="sm">
+              <Table.Thead>
+                <Table.Tr>
+                  <Table.Th>Device ID</Table.Th>
+                  <Table.Th>Model</Table.Th>
+                  <Table.Th>Serial Number</Table.Th>
+                  <Table.Th>Capacity</Table.Th>
+                  <Table.Th>Interface</Table.Th>
+                  <Table.Th>Location</Table.Th>
+                  <Table.Th>Status</Table.Th>
+                </Table.Tr>
+              </Table.Thead>
+              <Table.Tbody>{rows}</Table.Tbody>
+            </Table>
+          </Table.ScrollContainer>
+        )}
       </Paper>
     </Stack>
   );
