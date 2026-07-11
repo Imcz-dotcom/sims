@@ -22,6 +22,8 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
+app.use('/api/inventory', require('./routes/inventory'));
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
