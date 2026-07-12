@@ -1,23 +1,26 @@
 import { BarChart } from '@mantine/charts';
 import ChartCard from './ChartCard';
-import type { DistributionItem } from './types';
+import type { PivotResult } from './types';
 
 interface ModelPopularityChartProps {
-  data: DistributionItem[];
+  data: PivotResult;
 }
 
 export default function ModelPopularityChart({ data }: ModelPopularityChartProps) {
   return (
     <ChartCard
       title="Model Popularity"
-      description="Most common SSD models in the current inventory."
+      description="Most common SSD models, broken down by storage location."
     >
       <BarChart
         h={350}
-        data={data}
+        data={data.data}
         dataKey="name"
-        series={[{ name: 'count', label: 'SSDs', color: 'grape.6' }]}
+        type="stacked"
+        series={data.series}
         tickLine="y"
+        withLegend
+        legendProps={{ verticalAlign: 'top', align: 'right' }}
         xAxisProps={{
           angle: -45,
           textAnchor: 'end',

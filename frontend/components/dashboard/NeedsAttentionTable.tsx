@@ -1,4 +1,4 @@
-import { Alert, Badge, Group, Paper, Table, Text, Title } from '@mantine/core';
+import { Alert, Badge, Group, Paper, ScrollArea, Table, Text, Title } from '@mantine/core';
 import type { SSD } from './types';
 
 interface NeedsAttentionTableProps {
@@ -22,30 +22,32 @@ export default function NeedsAttentionTable({ data }: NeedsAttentionTableProps) 
       {data.length === 0 ? (
         <Alert color="green">No failed SSDs. All drives are operational or available.</Alert>
       ) : (
-        <Table.ScrollContainer minWidth={520}>
-          <Table verticalSpacing="sm">
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th>Device</Table.Th>
-                <Table.Th>Serial</Table.Th>
-                <Table.Th>Location</Table.Th>
-                <Table.Th>Status</Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
-              {data.map((item) => (
-                <Table.Tr key={item._id}>
-                  <Table.Td fw={600}>{item.deviceId}</Table.Td>
-                  <Table.Td ff="monospace">{item.serialNumber}</Table.Td>
-                  <Table.Td>{item.location}</Table.Td>
-                  <Table.Td>
-                    <Badge color="red">Failed</Badge>
-                  </Table.Td>
+        <ScrollArea h={300}>
+          <Table.ScrollContainer minWidth={520}>
+            <Table verticalSpacing="sm">
+              <Table.Thead>
+                <Table.Tr>
+                  <Table.Th>Device</Table.Th>
+                  <Table.Th>Serial</Table.Th>
+                  <Table.Th>Location</Table.Th>
+                  <Table.Th>Status</Table.Th>
                 </Table.Tr>
-              ))}
-            </Table.Tbody>
-          </Table>
-        </Table.ScrollContainer>
+              </Table.Thead>
+              <Table.Tbody>
+                {data.map((item) => (
+                  <Table.Tr key={item._id}>
+                    <Table.Td fw={600}>{item.deviceId}</Table.Td>
+                    <Table.Td ff="monospace">{item.serialNumber}</Table.Td>
+                    <Table.Td>{item.location}</Table.Td>
+                    <Table.Td>
+                      <Badge color="red">Failed</Badge>
+                    </Table.Td>
+                  </Table.Tr>
+                ))}
+              </Table.Tbody>
+            </Table>
+          </Table.ScrollContainer>
+        </ScrollArea>
       )}
     </Paper>
   );

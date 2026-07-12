@@ -28,7 +28,13 @@ import NeedsAttentionTable from '@/components/dashboard/NeedsAttentionTable';
 import RecentAdditionsTable from '@/components/dashboard/RecentAdditionsTable';
 import StatusOverviewChart from '@/components/dashboard/StatusOverviewChart';
 import SummaryCards from '@/components/dashboard/SummaryCards';
-import { chartColors, countBy, statusMeta, type SSD } from '@/components/dashboard/types';
+import {
+  chartColors,
+  countBy,
+  pivotCount,
+  statusMeta,
+  type SSD,
+} from '@/components/dashboard/types';
 
 export default function Home() {
   const [inventory, setInventory] = useState<SSD[]>([]);
@@ -110,14 +116,14 @@ export default function Home() {
     return {
       statusCounts,
       statusData,
-      locationData: countBy(inventory, 'location'),
+      locationData: pivotCount(inventory, 'location', 'model'),
       capacityData: countBy(inventory, 'capacity'),
       interfaceData: countBy(inventory, 'interface').map((item, index) => ({
         ...item,
         value: item.count,
         color: chartColors[index % chartColors.length],
       })),
-      modelData: countBy(inventory, 'model'),
+      modelData: pivotCount(inventory, 'model', 'location'),
       additionsData,
       recent: [...inventory]
         .sort(

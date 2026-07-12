@@ -7,7 +7,6 @@ import {
   Title,
   Stack,
   Avatar,
-  useMantineColorScheme,
   Button,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
@@ -39,7 +38,6 @@ const navItems = [
 export default function Layout({ children }: LayoutProps) {
   const [opened, { toggle }] = useDisclosure();
   const router = useRouter();
-  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
 
   return (
     <AppShell
@@ -61,9 +59,6 @@ export default function Layout({ children }: LayoutProps) {
           </Group>
 
           <Group gap="sm">
-            <Button variant="subtle" color="dark" size="xs" onClick={() => toggleColorScheme()}>
-              {colorScheme === 'dark' ? 'Light Mode' : 'Dark Mode'}
-            </Button>
             <Avatar size="sm" radius="xl" color="dark">
               A
             </Avatar>

@@ -1,23 +1,26 @@
 import { BarChart } from '@mantine/charts';
 import ChartCard from './ChartCard';
-import type { DistributionItem } from './types';
+import type { PivotResult } from './types';
 
 interface LocationChartProps {
-  data: DistributionItem[];
+  data: PivotResult;
 }
 
 export default function LocationChart({ data }: LocationChartProps) {
   return (
     <ChartCard
       title="Inventory by Location"
-      description="Number of registered drives at each site or storage area."
+      description="Drive models registered at each site or storage area."
     >
       <BarChart
         h={350}
-        data={data}
+        data={data.data}
         dataKey="name"
-        series={[{ name: 'count', label: 'SSDs', color: 'indigo.6' }]}
+        type="stacked"
+        series={data.series}
         tickLine="y"
+        withLegend
+        legendProps={{ verticalAlign: 'top', align: 'right' }}
         xAxisProps={{
           angle: -45,
           textAnchor: 'end',
