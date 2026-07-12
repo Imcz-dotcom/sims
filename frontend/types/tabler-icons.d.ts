@@ -13,4 +13,6 @@ declare module '@tabler/icons-react' {
   }
 
   export const IconFilter: ForwardRefExoticComponent<IconProps & RefAttributes<SVGSVGElement>>;
+  export const IconPencil: ForwardRefExoticComponent<IconProps & RefAttributes<SVGSVGElement>>;
+  export const IconTrash: ForwardRefExoticComponent<IconProps & RefAttributes<SVGSVGElement>>;
 }

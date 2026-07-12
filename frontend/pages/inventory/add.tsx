@@ -4,6 +4,13 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import axios from 'axios';
 import { API_BASE_URL } from '@/lib/api';
+import {
+  CAPACITY_OPTIONS,
+  INTERFACE_OPTIONS,
+  LOCATION_OPTIONS,
+  MODEL_OPTIONS,
+  STATUS_OPTIONS,
+} from '@/lib/ssdOptions';
 
 export default function RegisterSSD() {
   const router = useRouter();
@@ -68,20 +75,7 @@ export default function RegisterSSD() {
             <Select
               label="Model"
               placeholder="Select model"
-              data={[
-                'Samsung 990 Pro',
-                'Samsung 970 EVO Plus',
-                'Samsung 870 EVO',
-                'WD Black SN850X',
-                'WD Blue SA510',
-                'Crucial MX500',
-                'Crucial P5 Plus',
-                'Seagate FireCuda 530',
-                'Kingston KC3000',
-                'Kingston A400',
-                'SK Hynix Platinum P41',
-                'Intel Optane 905P',
-              ]}
+              data={MODEL_OPTIONS}
               required
               searchable
               radius="md"
@@ -104,7 +98,7 @@ export default function RegisterSSD() {
             <Select
               label="Capacity"
               placeholder="Select capacity"
-              data={['250 GB', '500 GB', '1 TB', '2 TB', '4 TB', '8 TB']}
+              data={CAPACITY_OPTIONS}
               required
               radius="md"
               value={form.capacity}
@@ -113,7 +107,7 @@ export default function RegisterSSD() {
             <Select
               label="Interface"
               placeholder="Select interface"
-              data={['SATA III', 'NVMe PCIe 3.0', 'NVMe PCIe 4.0', 'NVMe PCIe 5.0']}
+              data={INTERFACE_OPTIONS}
               required
               radius="md"
               value={form.interface}
@@ -125,7 +119,7 @@ export default function RegisterSSD() {
             <Select
               label="Status"
               placeholder="Select status"
-              data={['Active', 'Available', 'Failed']}
+              data={STATUS_OPTIONS}
               required
               radius="md"
               value={form.status}
@@ -134,19 +128,7 @@ export default function RegisterSSD() {
             <Select
               label="Location"
               placeholder="Select location"
-              data={[
-                'Rack A, Bay 1',
-                'Rack A, Bay 2',
-                'Rack A, Bay 3',
-                'Rack B, Bay 1',
-                'Rack B, Bay 2',
-                'Rack B, Bay 3',
-                'Server Room 1',
-                'Server Room 2',
-                'Warehouse',
-                'Data Center East',
-                'Data Center West',
-              ]}
+              data={LOCATION_OPTIONS}
               required
               searchable
               radius="md"
