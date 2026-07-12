@@ -13,13 +13,11 @@ export default function ModelPopularityChart({ data }: ModelPopularityChartProps
       description="Most common SSD models in the current inventory."
     >
       <BarChart
-        h={300}
+        h={350}
         data={data}
         dataKey="name"
         series={[{ name: 'count', label: 'SSDs', color: 'grape.6' }]}
         tickLine="y"
-        withLegend
-        legendProps={{ verticalAlign: 'top', align: 'right' }}
         xAxisProps={{
           angle: -45,
           textAnchor: 'end',

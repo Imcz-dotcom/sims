@@ -117,7 +117,7 @@ export default function Home() {
         value: item.count,
         color: chartColors[index % chartColors.length],
       })),
-      modelData: countBy(inventory, 'model').slice(0, 8),
+      modelData: countBy(inventory, 'model'),
       additionsData,
       recent: [...inventory]
         .sort(
@@ -206,12 +206,13 @@ export default function Home() {
         <>
           <SimpleGrid cols={{ base: 1, md: 2 }}>
             <StatusOverviewChart data={dashboard.statusData} />
-            <LocationChart data={dashboard.locationData} />
             <CapacityChart data={dashboard.capacityData} />
             <InterfaceChart data={dashboard.interfaceData} />
             <AdditionsTrendChart data={dashboard.additionsData} />
-            <ModelPopularityChart data={dashboard.modelData} />
           </SimpleGrid>
+
+          <LocationChart data={dashboard.locationData} />
+          <ModelPopularityChart data={dashboard.modelData} />
 
           <SimpleGrid cols={{ base: 1, lg: 2 }}>
             <RecentAdditionsTable data={dashboard.recent} />

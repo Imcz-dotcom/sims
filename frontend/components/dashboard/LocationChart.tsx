@@ -13,13 +13,18 @@ export default function LocationChart({ data }: LocationChartProps) {
       description="Number of registered drives at each site or storage area."
     >
       <BarChart
-        h={300}
+        h={350}
         data={data}
         dataKey="name"
         series={[{ name: 'count', label: 'SSDs', color: 'indigo.6' }]}
         tickLine="y"
-        withLegend
-        legendProps={{ verticalAlign: 'top', align: 'right' }}
+        xAxisProps={{
+          angle: -45,
+          textAnchor: 'end',
+          interval: 0,
+          height: 80,
+          tick: { fontSize: 10 },
+        }}
       />
     </ChartCard>
   );
