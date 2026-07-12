@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from '@/lib/api';
 
 export default function RegisterSSD() {
   const router = useRouter();
@@ -23,7 +24,7 @@ export default function RegisterSSD() {
     setLoading(true);
     setError('');
     try {
-      await axios.post('http://localhost:5000/api/inventory', form);
+      await axios.post(API_BASE_URL, form);
       router.push('/inventory');
     } catch (err) {
       setError(

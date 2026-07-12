@@ -18,6 +18,7 @@ import { IconFilter } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from '@/lib/api';
 
 interface SSD {
   _id: string;
@@ -41,7 +42,7 @@ export default function Inventory() {
   useEffect(() => {
     const fetchInventory = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/inventory');
+        const res = await axios.get(API_BASE_URL);
         setInventory(res.data);
       } catch (err) {
         setError(
