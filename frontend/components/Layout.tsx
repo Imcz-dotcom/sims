@@ -5,9 +5,7 @@ import {
   NavLink,
   Text,
   Title,
-  Badge,
   Stack,
-  Divider,
   Avatar,
   useMantineColorScheme,
   Button,
@@ -104,29 +102,6 @@ export default function Layout({ children }: LayoutProps) {
               />
             );
           })}
-        </Stack>
-
-        <Divider my="md" />
-
-        <Stack gap={4}>
-          <Text size="xs" fw={600} c="dimmed" tt="uppercase" mb={4} px={4}>
-            System
-          </Text>
-          <NavLink
-            label="System Status"
-            rightSection={
-              <Badge size="xs" color="dark" variant="light">
-                Online
-              </Badge>
-            }
-            variant="subtle"
-            style={{ borderRadius: '10px' }}
-          />
-          <NavLink
-            label="Server Info"
-            variant="subtle"
-            style={{ borderRadius: '10px' }}
-          />
         </Stack>
       </AppShell.Navbar>
 
