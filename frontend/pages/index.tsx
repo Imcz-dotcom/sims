@@ -3,13 +3,16 @@ import {
   Badge,
   Button,
   Center,
+  Checkbox,
   Group,
   Loader,
+  Modal,
   SimpleGrid,
   Stack,
   Text,
   Title,
 } from '@mantine/core';
+import { IconFilter } from '@tabler/icons-react';
 import axios from 'axios';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
@@ -29,6 +32,9 @@ export default function Home() {
   const [inventory, setInventory] = useState<SSD[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [statusFilter, setStatusFilter] = useState<string[]>([]);
+  const [capacityFilter, setCapacityFilter] = useState<string[]>([]);
+  const [filterModal, setFilterModal] = useState<'status' | 'capacity' | null>(null);
 
   useEffect(() => {
     const fetchInventory = async () => {
@@ -49,7 +55,23 @@ export default function Home() {
     fetchInventory();
   }, []);
 
+  const capacityOptions = useMemo(
+    () => Array.from(new Set(inventory.map((item) => item.capacity))).sort((a, b) => a.localeCompare(b)),
+    [inventory],
+  );
+
+  const filteredInventory = useMemo(
+    () =>
+      inventory.filter(
+        (item) =>
+          (statusFilter.length === 0 || statusFilter.includes(item.status)) &&
+          (capacityFilter.length === 0 || capacityFilter.includes(item.capacity)),
+      ),
+    [inventory, statusFilter, capacityFilter],
+  );
+
   const dashboard = useMemo(() => {
+    const inventory = filteredInventory;
     const statusCounts = {
       Active: inventory.filter((item) => item.status === 'Active').length,
       Available: inventory.filter((item) => item.status === 'Available').length,
@@ -89,7 +111,7 @@ export default function Home() {
         .slice(0, 6),
       failed: inventory.filter((item) => item.status === 'Failed'),
     };
-  }, [inventory]);
+  }, [filteredInventory]);
 
   if (loading) {
     return <Center h={400}><Loader size="lg" /></Center>;
@@ -113,9 +135,34 @@ export default function Home() {
         </Button>
       </Group>
 
+      {/* Filter Bar */}
+      <Group gap="sm">
+        <Text size="sm" fw={600} c="dimmed">Filters:</Text>
+        <Button
+          size="xs"
+          radius="xl"
+          variant={statusFilter.length > 0 ? 'filled' : 'light'}
+          color="dark"
+          leftSection={<IconFilter size={14} />}
+          onClick={() => setFilterModal('status')}
+        >
+          Status{statusFilter.length > 0 ? ` (${statusFilter.length})` : ''}
+        </Button>
+        <Button
+          size="xs"
+          radius="xl"
+          variant={capacityFilter.length > 0 ? 'filled' : 'light'}
+          color="dark"
+          leftSection={<IconFilter size={14} />}
+          onClick={() => setFilterModal('capacity')}
+        >
+          Capacity{capacityFilter.length > 0 ? ` (${capacityFilter.length})` : ''}
+        </Button>
+      </Group>
+
       {/* Summary Cards */}
       <SummaryCards
-        total={inventory.length}
+        total={filteredInventory.length}
         active={dashboard.statusCounts.Active}
         available={dashboard.statusCounts.Available}
         failed={dashboard.statusCounts.Failed}
@@ -142,6 +189,52 @@ export default function Home() {
           </SimpleGrid>
         </>
       )}
+
+      <Modal
+        opened={filterModal === 'status'}
+        onClose={() => setFilterModal(null)}
+        title="Filter by Status"
+        radius="lg"
+      >
+        <Checkbox.Group value={statusFilter} onChange={setStatusFilter}>
+          <Stack gap="sm">
+            {(['Active', 'Available', 'Failed'] as const).map((status) => (
+              <Checkbox key={status} value={status} label={status} />
+            ))}
+          </Stack>
+        </Checkbox.Group>
+        <Group justify="flex-end" mt="lg">
+          <Button variant="subtle" color="dark" onClick={() => setStatusFilter([])}>
+            Clear
+          </Button>
+          <Button color="dark" onClick={() => setFilterModal(null)}>
+            Apply
+          </Button>
+        </Group>
+      </Modal>
+
+      <Modal
+        opened={filterModal === 'capacity'}
+        onClose={() => setFilterModal(null)}
+        title="Filter by Capacity"
+        radius="lg"
+      >
+        <Checkbox.Group value={capacityFilter} onChange={setCapacityFilter}>
+          <Stack gap="sm">
+            {capacityOptions.map((capacity) => (
+              <Checkbox key={capacity} value={capacity} label={capacity} />
+            ))}
+          </Stack>
+        </Checkbox.Group>
+        <Group justify="flex-end" mt="lg">
+          <Button variant="subtle" color="dark" onClick={() => setCapacityFilter([])}>
+            Clear
+          </Button>
+          <Button color="dark" onClick={() => setFilterModal(null)}>
+            Apply
+          </Button>
+        </Group>
+      </Modal>
     </Stack>
   );
 }

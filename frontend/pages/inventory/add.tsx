@@ -65,13 +65,28 @@ export default function RegisterSSD() {
               value={form.deviceId}
               onChange={(e) => setForm({ ...form, deviceId: e.target.value })}
             />
-            <TextInput
+            <Select
               label="Model"
-              placeholder="e.g. Samsung 990 Pro"
+              placeholder="Select model"
+              data={[
+                'Samsung 990 Pro',
+                'Samsung 970 EVO Plus',
+                'Samsung 870 EVO',
+                'WD Black SN850X',
+                'WD Blue SA510',
+                'Crucial MX500',
+                'Crucial P5 Plus',
+                'Seagate FireCuda 530',
+                'Kingston KC3000',
+                'Kingston A400',
+                'SK Hynix Platinum P41',
+                'Intel Optane 905P',
+              ]}
               required
+              searchable
               radius="md"
               value={form.model}
-              onChange={(e) => setForm({ ...form, model: e.target.value })}
+              onChange={(val) => setForm({ ...form, model: val || '' })}
             />
           </Group>
 
@@ -116,13 +131,27 @@ export default function RegisterSSD() {
               value={form.status}
               onChange={(val) => setForm({ ...form, status: val || '' })}
             />
-            <TextInput
+            <Select
               label="Location"
-              placeholder="e.g. Rack A, Bay 5"
+              placeholder="Select location"
+              data={[
+                'Rack A, Bay 1',
+                'Rack A, Bay 2',
+                'Rack A, Bay 3',
+                'Rack B, Bay 1',
+                'Rack B, Bay 2',
+                'Rack B, Bay 3',
+                'Server Room 1',
+                'Server Room 2',
+                'Warehouse',
+                'Data Center East',
+                'Data Center West',
+              ]}
               required
+              searchable
               radius="md"
               value={form.location}
-              onChange={(e) => setForm({ ...form, location: e.target.value })}
+              onChange={(val) => setForm({ ...form, location: val || '' })}
             />
           </Group>
 

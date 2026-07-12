@@ -10,9 +10,13 @@ import {
   Stack,
   Loader,
   Center,
+  ActionIcon,
+  Popover,
+  Checkbox,
 } from '@mantine/core';
+import { IconFilter } from '@tabler/icons-react';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
 
 interface SSD {
@@ -31,6 +35,8 @@ export default function Inventory() {
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [capacityFilter, setCapacityFilter] = useState<string[]>([]);
+  const [statusFilter, setStatusFilter] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchInventory = async () => {
@@ -46,13 +52,24 @@ export default function Inventory() {
     fetchInventory();
   }, []);
 
+  const capacityOptions = useMemo(
+    () => Array.from(new Set(inventory.map((item) => item.capacity))).sort((a, b) => a.localeCompare(b)),
+    [inventory],
+  );
+  const statusOptions = useMemo(
+    () => Array.from(new Set(inventory.map((item) => item.status))).sort((a, b) => a.localeCompare(b)),
+    [inventory],
+  );
+
   const filtered = inventory.filter((item) => {
     const q = search.toLowerCase();
     return (
-      item.deviceId.toLowerCase().includes(q) ||
-      item.model.toLowerCase().includes(q) ||
-      item.serialNumber.toLowerCase().includes(q) ||
-      item.location.toLowerCase().includes(q)
+      (item.deviceId.toLowerCase().includes(q) ||
+        item.model.toLowerCase().includes(q) ||
+        item.serialNumber.toLowerCase().includes(q) ||
+        item.location.toLowerCase().includes(q)) &&
+      (capacityFilter.length === 0 || capacityFilter.includes(item.capacity)) &&
+      (statusFilter.length === 0 || statusFilter.includes(item.status))
     );
   });
 
@@ -124,10 +141,60 @@ export default function Inventory() {
                   <Table.Th>Device ID</Table.Th>
                   <Table.Th>Model</Table.Th>
                   <Table.Th>Serial Number</Table.Th>
-                  <Table.Th>Capacity</Table.Th>
+                  <Table.Th>
+                    <Group gap={4} wrap="nowrap">
+                      <Text size="sm" fw={600}>Capacity</Text>
+                      <Popover width={180} position="bottom-start" withArrow shadow="md">
+                        <Popover.Target>
+                          <ActionIcon
+                            size="sm"
+                            variant={capacityFilter.length > 0 ? 'filled' : 'subtle'}
+                            color="dark"
+                            aria-label="Filter by capacity"
+                          >
+                            <IconFilter size={14} />
+                          </ActionIcon>
+                        </Popover.Target>
+                        <Popover.Dropdown>
+                          <Checkbox.Group value={capacityFilter} onChange={setCapacityFilter}>
+                            <Stack gap="xs">
+                              {capacityOptions.map((capacity) => (
+                                <Checkbox key={capacity} value={capacity} label={capacity} size="xs" />
+                              ))}
+                            </Stack>
+                          </Checkbox.Group>
+                        </Popover.Dropdown>
+                      </Popover>
+                    </Group>
+                  </Table.Th>
                   <Table.Th>Interface</Table.Th>
                   <Table.Th>Location</Table.Th>
-                  <Table.Th>Status</Table.Th>
+                  <Table.Th>
+                    <Group gap={4} wrap="nowrap">
+                      <Text size="sm" fw={600}>Status</Text>
+                      <Popover width={160} position="bottom-start" withArrow shadow="md">
+                        <Popover.Target>
+                          <ActionIcon
+                            size="sm"
+                            variant={statusFilter.length > 0 ? 'filled' : 'subtle'}
+                            color="dark"
+                            aria-label="Filter by status"
+                          >
+                            <IconFilter size={14} />
+                          </ActionIcon>
+                        </Popover.Target>
+                        <Popover.Dropdown>
+                          <Checkbox.Group value={statusFilter} onChange={setStatusFilter}>
+                            <Stack gap="xs">
+                              {statusOptions.map((status) => (
+                                <Checkbox key={status} value={status} label={status} size="xs" />
+                              ))}
+                            </Stack>
+                          </Checkbox.Group>
+                        </Popover.Dropdown>
+                      </Popover>
+                    </Group>
+                  </Table.Th>
                 </Table.Tr>
               </Table.Thead>
               <Table.Tbody>{rows}</Table.Tbody>
