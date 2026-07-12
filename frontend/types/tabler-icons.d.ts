@@ -1,5 +1,10 @@
 declare module '@tabler/icons-react' {
-  import type { ComponentPropsWithoutRef, ForwardRefExoticComponent, RefAttributes, SVGSVGElement } from 'react';
+  import type {
+    ComponentPropsWithoutRef,
+    ForwardRefExoticComponent,
+    RefAttributes,
+    SVGSVGElement,
+  } from 'react';
 
   interface IconProps extends Partial<Omit<ComponentPropsWithoutRef<'svg'>, 'stroke'>> {
     size?: string | number;

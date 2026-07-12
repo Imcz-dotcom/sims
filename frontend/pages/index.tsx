@@ -56,7 +56,10 @@ export default function Home() {
   }, []);
 
   const capacityOptions = useMemo(
-    () => Array.from(new Set(inventory.map((item) => item.capacity))).sort((a, b) => a.localeCompare(b)),
+    () =>
+      Array.from(new Set(inventory.map((item) => item.capacity))).sort((a, b) =>
+        a.localeCompare(b),
+      ),
     [inventory],
   );
 
@@ -77,11 +80,13 @@ export default function Home() {
       Available: inventory.filter((item) => item.status === 'Available').length,
       Failed: inventory.filter((item) => item.status === 'Failed').length,
     };
-    const statusData = (Object.keys(statusCounts) as Array<keyof typeof statusCounts>).map((status) => ({
-      name: status,
-      value: statusCounts[status],
-      color: statusMeta[status].color,
-    }));
+    const statusData = (Object.keys(statusCounts) as Array<keyof typeof statusCounts>).map(
+      (status) => ({
+        name: status,
+        value: statusCounts[status],
+        color: statusMeta[status].color,
+      }),
+    );
     const additions = inventory.reduce<Record<string, number>>((result, item) => {
       const date = item.createdAt ? item.createdAt.slice(0, 10) : 'Unknown';
       result[date] = (result[date] || 0) + 1;
@@ -90,7 +95,13 @@ export default function Home() {
     const additionsData = Object.entries(additions)
       .sort(([first], [second]) => first.localeCompare(second))
       .map(([date, count]) => ({
-        date: date === 'Unknown' ? date : new Date(`${date}T00:00:00`).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }),
+        date:
+          date === 'Unknown'
+            ? date
+            : new Date(`${date}T00:00:00`).toLocaleDateString(undefined, {
+                month: 'short',
+                day: 'numeric',
+              }),
         count,
       }));
 
@@ -107,18 +118,29 @@ export default function Home() {
       modelData: countBy(inventory, 'model').slice(0, 8),
       additionsData,
       recent: [...inventory]
-        .sort((first, second) => new Date(second.createdAt).getTime() - new Date(first.createdAt).getTime())
+        .sort(
+          (first, second) =>
+            new Date(second.createdAt).getTime() - new Date(first.createdAt).getTime(),
+        )
         .slice(0, 6),
       failed: inventory.filter((item) => item.status === 'Failed'),
     };
   }, [filteredInventory]);
 
   if (loading) {
-    return <Center h={400}><Loader size="lg" /></Center>;
+    return (
+      <Center h={400}>
+        <Loader size="lg" />
+      </Center>
+    );
   }
 
   if (error) {
-    return <Alert color="red" title="Dashboard unavailable">{error}</Alert>;
+    return (
+      <Alert color="red" title="Dashboard unavailable">
+        {error}
+      </Alert>
+    );
   }
 
   return (
@@ -126,9 +148,13 @@ export default function Home() {
       {/* Hero Section */}
       <Group justify="space-between" align="flex-end">
         <div>
-          <Badge variant="light" color="dark" mb="xs">Live inventory analytics</Badge>
+          <Badge variant="light" color="dark" mb="xs">
+            Live inventory analytics
+          </Badge>
           <Title order={1}>SSD Dashboard</Title>
-          <Text c="dimmed">Monitor inventory distribution, activity, and drives requiring attention.</Text>
+          <Text c="dimmed">
+            Monitor inventory distribution, activity, and drives requiring attention.
+          </Text>
         </div>
         <Button component={Link} href="/inventory/add" radius="xl">
           Register SSD
@@ -137,7 +163,9 @@ export default function Home() {
 
       {/* Filter Bar */}
       <Group gap="sm">
-        <Text size="sm" fw={600} c="dimmed">Filters:</Text>
+        <Text size="sm" fw={600} c="dimmed">
+          Filters:
+        </Text>
         <Button
           size="xs"
           radius="xl"

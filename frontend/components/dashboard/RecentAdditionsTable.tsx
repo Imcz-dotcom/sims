@@ -12,20 +12,37 @@ export default function RecentAdditionsTable({ data }: RecentAdditionsTableProps
       <Group justify="space-between" mb="md">
         <div>
           <Title order={4}>Recent Additions</Title>
-          <Text size="sm" c="dimmed">The latest SSDs registered in the system.</Text>
+          <Text size="sm" c="dimmed">
+            The latest SSDs registered in the system.
+          </Text>
         </div>
-        <Button component={Link} href="/inventory" variant="subtle" size="xs">View all</Button>
+        <Button component={Link} href="/inventory" variant="subtle" size="xs">
+          View all
+        </Button>
       </Group>
       <Table.ScrollContainer minWidth={520}>
         <Table verticalSpacing="sm">
-          <Table.Thead><Table.Tr><Table.Th>Device</Table.Th><Table.Th>Model</Table.Th><Table.Th>Status</Table.Th><Table.Th>Added</Table.Th></Table.Tr></Table.Thead>
+          <Table.Thead>
+            <Table.Tr>
+              <Table.Th>Device</Table.Th>
+              <Table.Th>Model</Table.Th>
+              <Table.Th>Status</Table.Th>
+              <Table.Th>Added</Table.Th>
+            </Table.Tr>
+          </Table.Thead>
           <Table.Tbody>
             {data.map((item) => (
               <Table.Tr key={item._id}>
                 <Table.Td fw={600}>{item.deviceId}</Table.Td>
                 <Table.Td>{item.model}</Table.Td>
-                <Table.Td><Badge color={statusMeta[item.status].badge} variant="light">{item.status}</Badge></Table.Td>
-                <Table.Td>{item.createdAt ? new Date(item.createdAt).toLocaleDateString() : 'Unknown'}</Table.Td>
+                <Table.Td>
+                  <Badge color={statusMeta[item.status].badge} variant="light">
+                    {item.status}
+                  </Badge>
+                </Table.Td>
+                <Table.Td>
+                  {item.createdAt ? new Date(item.createdAt).toLocaleDateString() : 'Unknown'}
+                </Table.Td>
               </Table.Tr>
             ))}
           </Table.Tbody>

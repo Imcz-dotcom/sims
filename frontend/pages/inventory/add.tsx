@@ -1,13 +1,4 @@
-import {
-  Title,
-  Text,
-  Paper,
-  Group,
-  Button,
-  TextInput,
-  Select,
-  Stack,
-} from '@mantine/core';
+import { Title, Text, Paper, Group, Button, TextInput, Select, Stack } from '@mantine/core';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -34,8 +25,12 @@ export default function RegisterSSD() {
     try {
       await axios.post('http://localhost:5000/api/inventory', form);
       router.push('/inventory');
-    } catch (err: any) {
-      setError(err.response?.data?.error || 'Failed to register SSD');
+    } catch (err) {
+      setError(
+        axios.isAxiosError<{ error?: string }>(err)
+          ? err.response?.data?.error || 'Failed to register SSD'
+          : 'Failed to register SSD',
+      );
     } finally {
       setLoading(false);
     }
@@ -54,7 +49,11 @@ export default function RegisterSSD() {
 
       <Paper shadow="sm" radius="xl" p="xl" withBorder component="form" onSubmit={handleSubmit}>
         <Stack gap="md">
-          {error && <Text c="red" size="sm">{error}</Text>}
+          {error && (
+            <Text c="red" size="sm">
+              {error}
+            </Text>
+          )}
 
           <Group grow>
             <TextInput
@@ -156,22 +155,10 @@ export default function RegisterSSD() {
           </Group>
 
           <Group justify="flex-end" mt="lg">
-            <Button
-              component={Link}
-              href="/inventory"
-              variant="subtle"
-              color="dark"
-              radius="xl"
-            >
+            <Button component={Link} href="/inventory" variant="subtle" color="dark" radius="xl">
               Cancel
             </Button>
-            <Button
-              type="submit"
-              variant="filled"
-              color="dark"
-              radius="xl"
-              loading={loading}
-            >
+            <Button type="submit" variant="filled" color="dark" radius="xl" loading={loading}>
               Save SSD
             </Button>
           </Group>

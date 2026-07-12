@@ -43,8 +43,12 @@ export default function Inventory() {
       try {
         const res = await axios.get('http://localhost:5000/api/inventory');
         setInventory(res.data);
-      } catch (err: any) {
-        setError(err.response?.data?.error || 'Failed to load inventory');
+      } catch (err) {
+        setError(
+          axios.isAxiosError<{ error?: string }>(err)
+            ? err.response?.data?.error || 'Failed to load inventory'
+            : 'Failed to load inventory',
+        );
       } finally {
         setLoading(false);
       }
@@ -53,11 +57,15 @@ export default function Inventory() {
   }, []);
 
   const capacityOptions = useMemo(
-    () => Array.from(new Set(inventory.map((item) => item.capacity))).sort((a, b) => a.localeCompare(b)),
+    () =>
+      Array.from(new Set(inventory.map((item) => item.capacity))).sort((a, b) =>
+        a.localeCompare(b),
+      ),
     [inventory],
   );
   const statusOptions = useMemo(
-    () => Array.from(new Set(inventory.map((item) => item.status))).sort((a, b) => a.localeCompare(b)),
+    () =>
+      Array.from(new Set(inventory.map((item) => item.status))).sort((a, b) => a.localeCompare(b)),
     [inventory],
   );
 
@@ -89,7 +97,13 @@ export default function Inventory() {
         <Table.Td>{item.location}</Table.Td>
         <Table.Td>
           <Badge
-            variant={item.status === 'Active' ? 'filled' : item.status === 'Available' ? 'light' : 'outline'}
+            variant={
+              item.status === 'Active'
+                ? 'filled'
+                : item.status === 'Available'
+                  ? 'light'
+                  : 'outline'
+            }
             color={statusColor}
             size="sm"
           >
@@ -132,7 +146,9 @@ export default function Inventory() {
             <Loader color="dark" />
           </Center>
         ) : error ? (
-          <Text c="red" size="sm">{error}</Text>
+          <Text c="red" size="sm">
+            {error}
+          </Text>
         ) : (
           <Table.ScrollContainer minWidth={900}>
             <Table verticalSpacing="sm">
@@ -143,7 +159,9 @@ export default function Inventory() {
                   <Table.Th>Serial Number</Table.Th>
                   <Table.Th>
                     <Group gap={4} wrap="nowrap">
-                      <Text size="sm" fw={600}>Capacity</Text>
+                      <Text size="sm" fw={600}>
+                        Capacity
+                      </Text>
                       <Popover width={180} position="bottom-start" withArrow shadow="md">
                         <Popover.Target>
                           <ActionIcon
@@ -159,7 +177,12 @@ export default function Inventory() {
                           <Checkbox.Group value={capacityFilter} onChange={setCapacityFilter}>
                             <Stack gap="xs">
                               {capacityOptions.map((capacity) => (
-                                <Checkbox key={capacity} value={capacity} label={capacity} size="xs" />
+                                <Checkbox
+                                  key={capacity}
+                                  value={capacity}
+                                  label={capacity}
+                                  size="xs"
+                                />
                               ))}
                             </Stack>
                           </Checkbox.Group>
@@ -171,7 +194,9 @@ export default function Inventory() {
                   <Table.Th>Location</Table.Th>
                   <Table.Th>
                     <Group gap={4} wrap="nowrap">
-                      <Text size="sm" fw={600}>Status</Text>
+                      <Text size="sm" fw={600}>
+                        Status
+                      </Text>
                       <Popover width={160} position="bottom-start" withArrow shadow="md">
                         <Popover.Target>
                           <ActionIcon

@@ -11,7 +11,9 @@ export default function NeedsAttentionTable({ data }: NeedsAttentionTableProps) 
       <Group justify="space-between" mb="md">
         <div>
           <Title order={4}>Needs Attention</Title>
-          <Text size="sm" c="dimmed">Failed drives that may require replacement.</Text>
+          <Text size="sm" c="dimmed">
+            Failed drives that may require replacement.
+          </Text>
         </div>
         <Badge color={data.length ? 'red' : 'green'} variant="light">
           {data.length} failed
@@ -22,14 +24,23 @@ export default function NeedsAttentionTable({ data }: NeedsAttentionTableProps) 
       ) : (
         <Table.ScrollContainer minWidth={520}>
           <Table verticalSpacing="sm">
-            <Table.Thead><Table.Tr><Table.Th>Device</Table.Th><Table.Th>Serial</Table.Th><Table.Th>Location</Table.Th><Table.Th>Status</Table.Th></Table.Tr></Table.Thead>
+            <Table.Thead>
+              <Table.Tr>
+                <Table.Th>Device</Table.Th>
+                <Table.Th>Serial</Table.Th>
+                <Table.Th>Location</Table.Th>
+                <Table.Th>Status</Table.Th>
+              </Table.Tr>
+            </Table.Thead>
             <Table.Tbody>
               {data.map((item) => (
                 <Table.Tr key={item._id}>
                   <Table.Td fw={600}>{item.deviceId}</Table.Td>
                   <Table.Td ff="monospace">{item.serialNumber}</Table.Td>
                   <Table.Td>{item.location}</Table.Td>
-                  <Table.Td><Badge color="red">Failed</Badge></Table.Td>
+                  <Table.Td>
+                    <Badge color="red">Failed</Badge>
+                  </Table.Td>
                 </Table.Tr>
               ))}
             </Table.Tbody>

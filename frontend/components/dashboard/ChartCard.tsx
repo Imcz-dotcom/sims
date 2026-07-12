@@ -15,7 +15,9 @@ export default function ChartCard({ title, description, action, children }: Char
         <Title order={4}>{title}</Title>
         {action}
       </Group>
-      <Text size="sm" c="dimmed" mb="lg">{description}</Text>
+      <Text size="sm" c="dimmed" mb="lg">
+        {description}
+      </Text>
       {children}
     </Paper>
   );

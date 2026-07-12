@@ -11,7 +11,15 @@ export default function StatusOverviewChart({ data }: StatusOverviewChartProps) 
       title="Status Overview"
       description="Current health and availability across all SSDs."
     >
-      <DonutChart h={300} data={data} withLabels withLabelsLine tooltipDataSource="segment" withLegend legendProps={{ verticalAlign: 'top', align: 'right' }} />
+      <DonutChart
+        h={300}
+        data={data}
+        withLabels
+        withLabelsLine
+        tooltipDataSource="segment"
+        withLegend
+        legendProps={{ verticalAlign: 'top', align: 'right' }}
+      />
     </ChartCard>
   );
 }

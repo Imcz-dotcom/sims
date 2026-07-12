@@ -64,7 +64,9 @@ export default function Layout({ children }: LayoutProps) {
             <Button variant="subtle" color="dark" size="xs" onClick={() => toggleColorScheme()}>
               {colorScheme === 'dark' ? 'Light Mode' : 'Dark Mode'}
             </Button>
-            <Avatar size="sm" radius="xl" color="dark">A</Avatar>
+            <Avatar size="sm" radius="xl" color="dark">
+              A
+            </Avatar>
           </Group>
         </Group>
       </AppShell.Header>
@@ -91,12 +93,10 @@ export default function Layout({ children }: LayoutProps) {
                   borderRadius: '0 8px 8px 0',
                   transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
                   paddingLeft: isActive ? '16px' : '12px',
-                  borderLeft: isActive 
-                    ? '4px solid var(--mantine-color-black)' 
+                  borderLeft: isActive
+                    ? '4px solid var(--mantine-color-black)'
                     : '4px solid transparent',
-                  backgroundColor: isActive 
-                    ? 'rgba(0, 0, 0, 0.04)' 
-                    : 'transparent',
+                  backgroundColor: isActive ? 'rgba(0, 0, 0, 0.04)' : 'transparent',
                   fontWeight: isActive ? 600 : 400,
                 }}
               />
@@ -106,9 +106,7 @@ export default function Layout({ children }: LayoutProps) {
       </AppShell.Navbar>
 
       {/* Main Content */}
-      <AppShell.Main>
-        {children}
-      </AppShell.Main>
+      <AppShell.Main>{children}</AppShell.Main>
     </AppShell>
   );
 }
