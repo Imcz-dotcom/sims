@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Express.js backend",
   "main": "server.js",
+  "packageManager": "pnpm@10.22.0",
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",

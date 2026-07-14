@@ -111,6 +111,10 @@ Form with fields: Device ID, Serial Number (text inputs) and Model/Capacity/Inte
 
 ## Running the Project
 
+### Local shell prerequisite
+
+`pnpm` needs a working `node` binary in the same shell/environment. If you are running this in WSL and see `exec: node: not found`, install Node.js in WSL first or use a Node manager such as `nvm`/`fnm`/`volta`, then run `corepack enable` once before `pnpm install`.
+
 ### Option 1: Docker Compose (recommended)
 
 ```bash
@@ -129,17 +133,20 @@ Backend and frontend source directories are bind-mounted, so code edits are refl
 Requires a local or remote MongoDB instance.
 
 ```bash
+# once per shell/environment, after Node.js is installed
+corepack enable
+
 # backend
 cd backend
 cp .env.example .env   # set MONGODB_URI, PORT
-npm install
-npm run dev
+pnpm install
+pnpm dev
 
 # frontend (separate terminal)
 cd frontend
 cp .env.example .env.local   # set NEXT_PUBLIC_API_URL
-npm install
-npm run dev
+pnpm install
+pnpm dev
 ```
 
 ## Environment Variables
