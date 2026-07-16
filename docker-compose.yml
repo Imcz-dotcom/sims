@@ -19,9 +19,6 @@ services:
       MONGODB_URI: mongodb://mongodb:27017/sims
     depends_on:
       - mongodb
-    volumes:
-      - ./backend:/app
-      - backend-node_modules:/app/node_modules
 
   frontend:
     build: ./frontend
@@ -33,13 +30,3 @@ services:
       NEXT_PUBLIC_API_URL: "http://localhost:5000/api/inventory"
     depends_on:
       - backend
-    volumes:
-      - ./frontend:/app
-      - frontend-node_modules:/app/node_modules
-      - frontend-next:/app/.next
-
-volumes:
-  mongodb-data:
-  backend-node_modules:
-  frontend-node_modules:
-  frontend-next:
