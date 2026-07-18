@@ -28,17 +28,7 @@ import {
   MODEL_OPTIONS,
   STATUS_OPTIONS,
 } from '@/lib/ssdOptions';
-
-interface SSD {
-  _id: string;
-  deviceId: string;
-  model: string;
-  serialNumber: string;
-  capacity: string;
-  interface: string;
-  status: string;
-  location: string;
-}
+import { statusMeta, type SSD } from '@/components/dashboard/types';
 
 export default function Inventory() {
   const [inventory, setInventory] = useState<SSD[]>([]);
@@ -157,37 +147,21 @@ export default function Inventory() {
     );
   });
 
-  const rows = filtered.map((item) => {
-    let statusColor = 'dark';
-    if (item.status === 'Active') statusColor = 'dark';
-    if (item.status === 'Available') statusColor = 'gray';
-    if (item.status === 'Failed') statusColor = 'red';
-
-    return (
-      <Table.Tr key={item._id}>
-        <Table.Td style={{ fontWeight: 600 }}>{item.deviceId}</Table.Td>
-        <Table.Td>{item.model}</Table.Td>
-        <Table.Td style={{ fontFamily: 'monospace' }}>{item.serialNumber}</Table.Td>
-        <Table.Td>{item.capacity}</Table.Td>
-        <Table.Td>{item.interface}</Table.Td>
-        <Table.Td>{item.location}</Table.Td>
-        <Table.Td>
-          <Badge
-            variant={
-              item.status === 'Active'
-                ? 'filled'
-                : item.status === 'Available'
-                  ? 'light'
-                  : 'outline'
-            }
-            color={statusColor}
-            size="sm"
-          >
-            {item.status}
-          </Badge>
-        </Table.Td>
-        <Table.Td>
-          <Group gap="xs" wrap="nowrap">
+  const rows = filtered.map((item) => (
+    <Table.Tr key={item._id}>
+      <Table.Td style={{ fontWeight: 600 }}>{item.deviceId}</Table.Td>
+      <Table.Td>{item.model}</Table.Td>
+      <Table.Td style={{ fontFamily: 'monospace' }}>{item.serialNumber}</Table.Td>
+      <Table.Td>{item.capacity}</Table.Td>
+      <Table.Td>{item.interface}</Table.Td>
+      <Table.Td>{item.location}</Table.Td>
+      <Table.Td>
+        <Badge color={statusMeta[item.status]?.badge ?? 'dark'} variant="light" size="sm">
+          {item.status}
+        </Badge>
+      </Table.Td>
+      <Table.Td>
+        <Group gap="xs" wrap="nowrap">
             <ActionIcon
               variant="subtle"
               color="dark"
@@ -208,8 +182,7 @@ export default function Inventory() {
           </Group>
         </Table.Td>
       </Table.Tr>
-    );
-  });
+    ));
 
   return (
     <Stack gap="lg" maw={1100} mx="auto">
