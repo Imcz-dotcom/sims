@@ -20,7 +20,6 @@ import { IconFilter, IconPencil, IconTrash } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
-import { API_BASE_URL } from '@/lib/api';
 import {
   CAPACITY_OPTIONS,
   INTERFACE_OPTIONS,
@@ -54,7 +53,7 @@ export default function Inventory() {
   useEffect(() => {
     const fetchInventory = async () => {
       try {
-        const res = await axios.get(API_BASE_URL);
+        const res = await axios.get(process.env.NEXT_PUBLIC_API_URL!);
         setInventory(res.data);
       } catch (err) {
         setError(
@@ -102,7 +101,7 @@ export default function Inventory() {
     setEditLoading(true);
     setEditError('');
     try {
-      const res = await axios.put(`${API_BASE_URL}/${editTarget._id}`, editForm);
+      const res = await axios.put(`${process.env.NEXT_PUBLIC_API_URL!}/${editTarget._id}`, editForm);
       setInventory((prev) =>
         prev.map((item) => (item._id === editTarget._id ? res.data.data : item)),
       );
@@ -122,7 +121,7 @@ export default function Inventory() {
     if (!window.confirm('Delete this SSD record? This action cannot be undone.')) return;
     setDeletingId(id);
     try {
-      await axios.delete(`${API_BASE_URL}/${id}`);
+      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL!}/${id}`);
       setInventory((prev) => prev.filter((item) => item._id !== id));
     } catch (err) {
       setError(

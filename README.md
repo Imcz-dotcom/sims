@@ -354,3 +354,107 @@ Frontend `dev` script uses `next dev --webpack`. Next.js 16 defaults to Turbopac
 
 ### Collection Name
 Mongoose automatically lowercases and pluralizes the model name: `mongoose.model('SSD', ...)` → collection `ssds`.
+
+ Problem: IT teams track SSDs in spreadsheets. Spreadsheets don't show you patterns — which models are failing, where capacity is concentrated,
+  or whether a site is overloaded with one interface type. You don't know what needs attention until something breaks.
+
+  Solution: SIMS — a single-pane view of every SSD across your fleet. Register a drive in 30 seconds, and the dashboard does the rest: charts
+  update live, failures surface immediately, and filters let you slice by status, capacity, or location.
+
+  ---
+  Live Demo Script (the "good flow")
+
+  Run through this sequence — it takes ~3 minutes and hits every feature:
+
+  Act 1: The Dashboard (30s)
+
+  Open the app to /. You land on a dashboard with:
+  - 4 summary cards at the top — total drives, active, available, failed
+  - 6 charts below — status donut, capacity bars, interface donut, additions trend line, location stacked bars, model popularity stacked bars
+  - 2 tables at the bottom — recent additions, failed drives needing attention
+
+  Say: "This is the zero-config view. Every chart is live — no setup, no dashboard builder. The moment a drive is registered, these all update."
+
+  Click the status/capacity filter pills to show how the entire dashboard re-filters instantly.
+
+  Act 2: Register a Drive (60s)
+
+  Click "Register SSD" (top-right button) → goes to /inventory/add.
+
+  Fill in a drive live:
+
+  ┌───────────────┬─────────────────┐
+  │     Field     │      Value      │
+  ├───────────────┼─────────────────┤
+  │ Device ID     │ SSD-DEMO-01     │
+  ├───────────────┼─────────────────┤
+  │ Model         │ Samsung 990 Pro │
+  ├───────────────┼─────────────────┤
+  │ Serial Number │ S7M3N0WBC40987X │
+  ├───────────────┼─────────────────┤
+  │ Capacity      │ 2TB             │
+  ├───────────────┼─────────────────┤
+  │ Interface     │ NVMe            │
+  ├───────────────┼─────────────────┤
+  │ Status        │ Active          │
+  ├───────────────┼─────────────────┤
+  │ Location      │ DC1-Rack4       │
+  └───────────────┴─────────────────┘
+
+  Click Save SSD → redirects to /inventory.
+
+  Say: "One form, 7 fields, 30 seconds. Searchable dropdowns for model and location mean no typos. And —"
+
+  Act 3: It Appears Everywhere (45s)
+
+  Navigate back to / (click Dashboard in the sidebar).
+
+  Say: "— it's already in every chart. Summary count went up. Capacity distribution shifted. Location chart now shows DC1-Rack4. The additions 
+  trend has today's datapoint. No refresh, no ETL, no waiting."
+
+  Point at the Recent Additions table — the new drive is top of the list.
+
+  Act 4: Inventory Management (45s)
+
+  Go to /inventory (View Records in sidebar).
+
+  Say: "The table view gives you full control."
+
+  - Type 990 in the search bar → table filters to matching rows.
+  Say: "Search hits device ID, model, serial, or location — no column picker needed."
+  - Click the filter icon on the Capacity column header → check 2TB → table filters.
+  Say: "Inline column filters. Same filters exist on the dashboard too."
+  - Click the pencil icon on a row → edit modal opens → change status to Failed → Save.
+  Say: "Inline edit — no page navigation."
+
+  Act 5: The "Needs Attention" Loop (30s)
+
+  Navigate back to the dashboard.
+
+  Say: "And this is why the dashboard matters. That drive we just marked as Failed? It's now in the Needs Attention table. The status donut red 
+  slice grew. You don't go looking for problems — the dashboard surfaces them."
+
+  Point at the Needs Attention table at the bottom — the failed drive is listed with its serial, model, and location so someone knows exactly
+  which physical drive to pull.
+
+  Act 6: Delete (15s)
+
+  Back to /inventory, click the trash icon on the demo drive → confirm → row disappears.
+
+  Say: "Delete is one click with a confirmation guard. And yes — the dashboard updates again."
+
+  ---
+  The 3 Talking Points to Hammer
+
+  1. Live, not static. Every create/update/delete flows back to the dashboard instantly. No refresh button exists because none is needed.
+  2. Filters are global. Filter by status or capacity on the dashboard, and every chart + table respects it. Same filters exist on the table
+  view. The mental model is consistent.
+  3. Problems find you. The "Needs Attention" table and the red Failed badge mean you don't audit a spreadsheet — the dashboard tells you what to
+  care about.
+
+  ---
+  If You're Screen-Recording
+
+  Pre-seed the database with ~15-20 drives across different models, capacities, locations, and statuses (including 2-3 Failed ones) so the charts
+  look populated and the "Needs Attention" table has rows from the first frame. Then run the demo flow above. The contrast between "already
+  populated" and "watch this new one appear everywhere" is the punchline.

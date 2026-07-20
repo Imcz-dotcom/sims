@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import axios from 'axios';
-import { API_BASE_URL } from '@/lib/api';
 import {
   CAPACITY_OPTIONS,
   INTERFACE_OPTIONS,
@@ -31,7 +30,7 @@ export default function RegisterSSD() {
     setLoading(true);
     setError('');
     try {
-      await axios.post(API_BASE_URL, form);
+      await axios.post(process.env.NEXT_PUBLIC_API_URL!, form);
       router.push('/inventory');
     } catch (err) {
       setError(

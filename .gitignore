@@ -1,2 +1,6 @@
 # Playwright MCP artifacts
 .playwright-mcp/
+
+# Environment
+.env
+!.env.example

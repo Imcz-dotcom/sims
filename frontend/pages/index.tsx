@@ -17,8 +17,6 @@ import axios from 'axios';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 
-import { API_BASE_URL } from '@/lib/api';
-
 import AdditionsTrendChart from '@/components/dashboard/AdditionsTrendChart';
 import CapacityChart from '@/components/dashboard/CapacityChart';
 import InterfaceChart from '@/components/dashboard/InterfaceChart';
@@ -42,7 +40,7 @@ export default function Home() {
   useEffect(() => {
     const fetchInventory = async () => {
       try {
-        const response = await axios.get<SSD[]>(API_BASE_URL);
+        const response = await axios.get<SSD[]>(process.env.NEXT_PUBLIC_API_URL!);
         setInventory(response.data);
       } catch (requestError) {
         setError(
