@@ -1,12 +1,19 @@
+import { useMemo } from 'react';
 import { BarChart } from '@mantine/charts';
 import ChartCard from './ChartCard';
-import type { PivotResult } from './chart-utils';
+import { pivotCount } from './chart-utils';
+import type { SSD } from '@/lib/shared';
 
 interface LocationChartProps {
-  data: PivotResult;
+  inventory: SSD[];
 }
 
-export default function LocationChart({ data }: LocationChartProps) {
+export default function LocationChart({ inventory }: LocationChartProps) {
+  const { data, series } = useMemo(
+    () => pivotCount(inventory, 'location', 'model'),
+    [inventory],
+  );
+
   return (
     <ChartCard
       title="Inventory by Location"
@@ -14,10 +21,10 @@ export default function LocationChart({ data }: LocationChartProps) {
     >
       <BarChart
         h={350}
-        data={data.data}
+        data={data}
         dataKey="name"
         type="stacked"
-        series={data.series}
+        series={series}
         tickLine="y"
         withLegend
         legendProps={{ verticalAlign: 'top', align: 'right' }}

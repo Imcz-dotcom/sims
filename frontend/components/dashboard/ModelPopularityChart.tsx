@@ -1,12 +1,19 @@
+import { useMemo } from 'react';
 import { BarChart } from '@mantine/charts';
 import ChartCard from './ChartCard';
-import type { PivotResult } from './chart-utils';
+import { pivotCount } from './chart-utils';
+import type { SSD } from '@/lib/shared';
 
 interface ModelPopularityChartProps {
-  data: PivotResult;
+  inventory: SSD[];
 }
 
-export default function ModelPopularityChart({ data }: ModelPopularityChartProps) {
+export default function ModelPopularityChart({ inventory }: ModelPopularityChartProps) {
+  const { data, series } = useMemo(
+    () => pivotCount(inventory, 'model', 'location'),
+    [inventory],
+  );
+
   return (
     <ChartCard
       title="Model Popularity"
@@ -14,10 +21,10 @@ export default function ModelPopularityChart({ data }: ModelPopularityChartProps
     >
       <BarChart
         h={350}
-        data={data.data}
+        data={data}
         dataKey="name"
         type="stacked"
-        series={data.series}
+        series={series}
         tickLine="y"
         withLegend
         legendProps={{ verticalAlign: 'top', align: 'right' }}

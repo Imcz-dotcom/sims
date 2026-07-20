@@ -1,11 +1,17 @@
+import { useMemo } from 'react';
 import { Alert, Badge, Group, Paper, ScrollArea, Table, Text, Title } from '@mantine/core';
 import type { SSD } from '@/lib/shared';
 
 interface NeedsAttentionTableProps {
-  data: SSD[];
+  inventory: SSD[];
 }
 
-export default function NeedsAttentionTable({ data }: NeedsAttentionTableProps) {
+export default function NeedsAttentionTable({ inventory }: NeedsAttentionTableProps) {
+  const data = useMemo(
+    () => inventory.filter((item) => item.status === 'Failed'),
+    [inventory],
+  );
+
   return (
     <Paper withBorder radius="xl" p="lg" shadow="xs">
       <Group justify="space-between" mb="md">

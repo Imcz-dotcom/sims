@@ -1,12 +1,24 @@
+import { useMemo } from 'react';
 import { Badge, Button, Group, Paper, ScrollArea, Table, Text, Title } from '@mantine/core';
 import Link from 'next/link';
 import { statusMeta, type SSD } from '@/lib/shared';
 
 interface RecentAdditionsTableProps {
-  data: SSD[];
+  inventory: SSD[];
 }
 
-export default function RecentAdditionsTable({ data }: RecentAdditionsTableProps) {
+export default function RecentAdditionsTable({ inventory }: RecentAdditionsTableProps) {
+  const data = useMemo(
+    () =>
+      [...inventory]
+        .sort(
+          (first, second) =>
+            new Date(second.createdAt).getTime() - new Date(first.createdAt).getTime(),
+        )
+        .slice(0, 6),
+    [inventory],
+  );
+
   return (
     <Paper withBorder radius="xl" p="lg" shadow="xs">
       <Group justify="space-between" mb="md">

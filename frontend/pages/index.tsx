@@ -26,8 +26,7 @@ import NeedsAttentionTable from '@/components/dashboard/NeedsAttentionTable';
 import RecentAdditionsTable from '@/components/dashboard/RecentAdditionsTable';
 import StatusOverviewChart from '@/components/dashboard/StatusOverviewChart';
 import SummaryCards from '@/components/dashboard/SummaryCards';
-import { statusMeta, type SSD } from '@/lib/shared';
-import { chartColors, countBy, pivotCount } from '@/components/dashboard/chart-utils';
+import type { SSD } from '@/lib/shared';
 
 export default function Home() {
   const [inventory, setInventory] = useState<SSD[]>([]);
@@ -73,60 +72,6 @@ export default function Home() {
       ),
     [inventory, statusFilter, capacityFilter],
   );
-
-  const dashboard = useMemo(() => {
-    const inventory = filteredInventory;
-    const statusCounts = {
-      Active: inventory.filter((item) => item.status === 'Active').length,
-      Available: inventory.filter((item) => item.status === 'Available').length,
-      Failed: inventory.filter((item) => item.status === 'Failed').length,
-    };
-    const statusData = (Object.keys(statusCounts) as Array<keyof typeof statusCounts>).map(
-      (status) => ({
-        name: status,
-        value: statusCounts[status],
-        color: statusMeta[status].color,
-      }),
-    );
-    const additions = inventory.reduce<Record<string, number>>((result, item) => {
-      const date = item.createdAt ? item.createdAt.slice(0, 10) : 'Unknown';
-      result[date] = (result[date] || 0) + 1;
-      return result;
-    }, {});
-    const additionsData = Object.entries(additions)
-      .sort(([first], [second]) => first.localeCompare(second))
-      .map(([date, count]) => ({
-        date:
-          date === 'Unknown'
-            ? date
-            : new Date(`${date}T00:00:00`).toLocaleDateString(undefined, {
-                month: 'short',
-                day: 'numeric',
-              }),
-        count,
-      }));
-
-    return {
-      statusCounts,
-      statusData,
-      locationData: pivotCount(inventory, 'location', 'model'),
-      capacityData: countBy(inventory, 'capacity'),
-      interfaceData: countBy(inventory, 'interface').map((item, index) => ({
-        ...item,
-        value: item.count,
-        color: chartColors[index % chartColors.length],
-      })),
-      modelData: pivotCount(inventory, 'model', 'location'),
-      additionsData,
-      recent: [...inventory]
-        .sort(
-          (first, second) =>
-            new Date(second.createdAt).getTime() - new Date(first.createdAt).getTime(),
-        )
-        .slice(0, 6),
-      failed: inventory.filter((item) => item.status === 'Failed'),
-    };
-  }, [filteredInventory]);
 
   if (loading) {
     return (
@@ -190,12 +135,7 @@ export default function Home() {
       </Group>
 
       {/* Summary Cards */}
-      <SummaryCards
-        total={filteredInventory.length}
-        active={dashboard.statusCounts.Active}
-        available={dashboard.statusCounts.Available}
-        failed={dashboard.statusCounts.Failed}
-      />
+      <SummaryCards inventory={filteredInventory} />
 
       {inventory.length === 0 ? (
         <Alert color="blue" title="No inventory data yet">
@@ -204,18 +144,18 @@ export default function Home() {
       ) : (
         <>
           <SimpleGrid cols={{ base: 1, md: 2 }}>
-            <StatusOverviewChart data={dashboard.statusData} />
-            <CapacityChart data={dashboard.capacityData} />
-            <InterfaceChart data={dashboard.interfaceData} />
-            <AdditionsTrendChart data={dashboard.additionsData} />
+            <StatusOverviewChart inventory={filteredInventory} />
+            <CapacityChart inventory={filteredInventory} />
+            <InterfaceChart inventory={filteredInventory} />
+            <AdditionsTrendChart inventory={filteredInventory} />
           </SimpleGrid>
 
-          <LocationChart data={dashboard.locationData} />
-          <ModelPopularityChart data={dashboard.modelData} />
+          <LocationChart inventory={filteredInventory} />
+          <ModelPopularityChart inventory={filteredInventory} />
 
           <SimpleGrid cols={{ base: 1, lg: 2 }}>
-            <RecentAdditionsTable data={dashboard.recent} />
-            <NeedsAttentionTable data={dashboard.failed} />
+            <RecentAdditionsTable inventory={filteredInventory} />
+            <NeedsAttentionTable inventory={filteredInventory} />
           </SimpleGrid>
         </>
       )}

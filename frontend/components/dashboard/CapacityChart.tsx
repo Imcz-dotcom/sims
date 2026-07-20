@@ -1,16 +1,16 @@
+import { useMemo } from 'react';
 import { BarChart } from '@mantine/charts';
 import ChartCard from './ChartCard';
-
-interface DistributionItem {
-  name: string;
-  count: number;
-}
+import { countBy } from './chart-utils';
+import type { SSD } from '@/lib/shared';
 
 interface CapacityChartProps {
-  data: DistributionItem[];
+  inventory: SSD[];
 }
 
-export default function CapacityChart({ data }: CapacityChartProps) {
+export default function CapacityChart({ inventory }: CapacityChartProps) {
+  const data = useMemo(() => countBy(inventory, 'capacity'), [inventory]);
+
   return (
     <ChartCard
       title="Capacity Distribution"

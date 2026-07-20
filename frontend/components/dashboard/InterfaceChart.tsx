@@ -1,11 +1,24 @@
+import { useMemo } from 'react';
 import { DonutChart } from '@mantine/charts';
 import ChartCard from './ChartCard';
+import { chartColors, countBy } from './chart-utils';
+import type { SSD } from '@/lib/shared';
 
 interface InterfaceChartProps {
-  data: { name: string; count: number; value: number; color: string }[];
+  inventory: SSD[];
 }
 
-export default function InterfaceChart({ data }: InterfaceChartProps) {
+export default function InterfaceChart({ inventory }: InterfaceChartProps) {
+  const data = useMemo(
+    () =>
+      countBy(inventory, 'interface').map((item, index) => ({
+        ...item,
+        value: item.count,
+        color: chartColors[index % chartColors.length],
+      })),
+    [inventory],
+  );
+
   return (
     <ChartCard
       title="Interface Breakdown"
