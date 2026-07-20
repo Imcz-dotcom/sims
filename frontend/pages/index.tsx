@@ -28,13 +28,8 @@ import NeedsAttentionTable from '@/components/dashboard/NeedsAttentionTable';
 import RecentAdditionsTable from '@/components/dashboard/RecentAdditionsTable';
 import StatusOverviewChart from '@/components/dashboard/StatusOverviewChart';
 import SummaryCards from '@/components/dashboard/SummaryCards';
-import {
-  chartColors,
-  countBy,
-  pivotCount,
-  statusMeta,
-  type SSD,
-} from '@/components/dashboard/types';
+import { statusMeta, type SSD } from '@/lib/shared';
+import { chartColors, countBy, pivotCount } from '@/components/dashboard/chart-utils';
 
 export default function Home() {
   const [inventory, setInventory] = useState<SSD[]>([]);

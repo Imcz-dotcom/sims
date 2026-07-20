@@ -1,6 +1,6 @@
 import { BarChart } from '@mantine/charts';
 import ChartCard from './ChartCard';
-import type { PivotResult } from './types';
+import type { PivotResult } from './chart-utils';
 
 interface LocationChartProps {
   data: PivotResult;

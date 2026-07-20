@@ -1,5 +1,5 @@
 import { Alert, Badge, Group, Paper, ScrollArea, Table, Text, Title } from '@mantine/core';
-import type { SSD } from './types';
+import type { SSD } from '@/lib/shared';
 
 interface NeedsAttentionTableProps {
   data: SSD[];

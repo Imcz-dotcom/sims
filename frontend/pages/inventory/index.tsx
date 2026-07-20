@@ -27,8 +27,8 @@ import {
   LOCATION_OPTIONS,
   MODEL_OPTIONS,
   STATUS_OPTIONS,
-} from '@/lib/ssdOptions';
-import { statusMeta, type SSD } from '@/components/dashboard/types';
+} from '@/lib/options';
+import { statusMeta, type SSD } from '@/lib/shared';
 
 export default function Inventory() {
   const [inventory, setInventory] = useState<SSD[]>([]);

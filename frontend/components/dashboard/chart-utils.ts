@@ -1,25 +1,21 @@
-export interface SSD {
-  _id: string;
-  deviceId: string;
-  model: string;
-  serialNumber: string;
-  capacity: string;
-  interface: string;
-  status: 'Active' | 'Available' | 'Failed';
-  location: string;
-  createdAt: string;
-}
+import type { SSD } from '@/lib/shared';
 
-export interface DistributionItem {
+interface DistributionItem {
   name: string;
   count: number;
 }
 
-export const statusMeta = {
-  Active: { color: 'green.6', badge: 'green' },
-  Available: { color: 'blue.6', badge: 'blue' },
-  Failed: { color: 'red.6', badge: 'red' },
-};
+interface StackedSeries {
+  name: string;
+  color: string;
+}
+
+interface PivotResult {
+  data: Array<Record<string, string | number>>;
+  series: StackedSeries[];
+}
+
+export type { DistributionItem, PivotResult, StackedSeries };
 
 export const chartColors = [
   'red.6',
@@ -58,16 +54,6 @@ export function countBy(items: SSD[], key: keyof SSD): DistributionItem[] {
   return Object.entries(counts)
     .map(([name, count]) => ({ name, count }))
     .sort((a, b) => b.count - a.count);
-}
-
-export interface StackedSeries {
-  name: string;
-  color: string;
-}
-
-export interface PivotResult {
-  data: Array<Record<string, string | number>>;
-  series: StackedSeries[];
 }
 
 export function pivotCount(items: SSD[], groupKey: keyof SSD, seriesKey: keyof SSD): PivotResult {

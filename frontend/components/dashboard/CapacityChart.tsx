@@ -1,6 +1,10 @@
 import { BarChart } from '@mantine/charts';
 import ChartCard from './ChartCard';
-import type { DistributionItem } from './types';
+
+interface DistributionItem {
+  name: string;
+  count: number;
+}
 
 interface CapacityChartProps {
   data: DistributionItem[];

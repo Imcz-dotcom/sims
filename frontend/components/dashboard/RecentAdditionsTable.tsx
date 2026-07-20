@@ -1,6 +1,6 @@
 import { Badge, Button, Group, Paper, ScrollArea, Table, Text, Title } from '@mantine/core';
 import Link from 'next/link';
-import { statusMeta, type SSD } from './types';
+import { statusMeta, type SSD } from '@/lib/shared';
 
 interface RecentAdditionsTableProps {
   data: SSD[];

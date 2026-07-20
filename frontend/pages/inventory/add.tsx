@@ -10,7 +10,7 @@ import {
   LOCATION_OPTIONS,
   MODEL_OPTIONS,
   STATUS_OPTIONS,
-} from '@/lib/ssdOptions';
+} from '@/lib/options';
 
 export default function RegisterSSD() {
   const router = useRouter();
